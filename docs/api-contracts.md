@@ -90,6 +90,13 @@ The completion response is the shareable full-group scorecard:
     {"user_id": "uuid", "first_name": "Taylor", "points": 11},
     {"user_id": "uuid", "first_name": "Maya", "points": 11}
   ],
+  "current_user_summary": {
+    "rank": 1,
+    "points": 11,
+    "exact_predictions": 3,
+    "group_predictions": 2,
+    "incorrect_predictions": 0
+  },
   "leaders": [
     {"rank": 1, "user_id": "uuid", "first_name": "Taylor", "points": 11},
     {"rank": 1, "user_id": "uuid", "first_name": "Maya", "points": 11},
@@ -102,6 +109,12 @@ Every player tied at the highest score is returned in `winners`. Each shares the
 Equal scores receive the same rank; the next rank skips the tied places.
 Completed-game leaderboard reads return this same frozen ordering so hosts and
 players see one canonical final scorecard.
+
+The host completion screen prioritizes the full ranking and sharing. Every
+player receives a personalized completion view from the same response: winners
+first, their own score and prediction breakdown second, and the remaining
+players last. `group_predictions` counts correct scoring-group calls that were
+not exact; it is the generic representation of the one-point outcome.
 
 ## Poll configuration
 

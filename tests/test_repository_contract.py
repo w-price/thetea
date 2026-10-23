@@ -85,4 +85,6 @@ def test_host_completion_freezes_group_scorecard_and_shares_tied_crown():
     assert '"winners"' in API_CONTRACT
     assert "shares the crown" in API_CONTRACT
     assert "canonical final scorecard" in API_CONTRACT
+    assert '"current_user_summary"' in API_CONTRACT
+    assert "personalized completion view" in API_CONTRACT
 
