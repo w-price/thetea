@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Create a prediction party in The Tea."
+    >
+    <title>Build your game — The Tea</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="static/host.js" defer></script>
+  </head>
+  <body>
+    <main class="builder-shell">
+      <header class="site-header builder-header">
+        <a class="wordmark" href="index.html" aria-label="The Tea home">
+          <span class="wordmark-mark" aria-hidden="true">t</span>
+          <span>the tea</span>
+        </a>
+        <span class="status-pill"><span aria-hidden="true">●</span> Draft</span>
+      </header>
+
+      <section class="builder-intro" aria-labelledby="builder-title">
+        <p class="eyebrow">Host mode</p>
+        <h1 id="builder-title">Set the table.</h1>
+        <p class="hero-copy">
+          Add the moments everyone will predict. We’ll keep your draft saved as
+          you go.
+        </p>
+      </section>
+
+      <form id="game-builder">
+        <section class="builder-card" aria-labelledby="game-details-title">
+          <div class="section-heading">
+            <span class="section-number">1</span>
+            <div>
+              <p class="step-label">Game details</p>
+              <h2 id="game-details-title">Name the occasion.</h2>
+            </div>
+          </div>
+
+          <label for="game-title">Game name</label>
+          <input
+            id="game-title"
+            name="title"
+            placeholder="Friday finale predictions"
+            maxlength="120"
+            required
+          >
+
+          <label for="game-description">A little context <span class="optional">Optional</span></label>
+          <textarea
+            id="game-description"
+            name="description"
+            placeholder="For the group chat that has called every twist..."
+            rows="3"
+          ></textarea>
+        </section>
+
+        <section class="poll-builder-section" aria-labelledby="polls-title">
+          <div class="section-heading section-heading-spaced">
+            <span class="section-number">2</span>
+            <div>
+              <p class="step-label">Predictions</p>
+              <h2 id="polls-title">Who are we calling?</h2>
+            </div>
+          </div>
+
+          <div class="poll-list" id="poll-list">
+            <article class="poll-card" data-poll>
+              <div class="poll-card-header">
+                <div>
+                  <span class="poll-kicker">Poll 1</span>
+                  <h3>Prediction subject</h3>
+                </div>
+                <div class="poll-actions" aria-label="Poll actions">
+                  <button type="button" data-move="up" aria-label="Move poll up">↑</button>
+                  <button type="button" data-move="down" aria-label="Move poll down">↓</button>
+                  <button type="button" data-remove aria-label="Remove poll">×</button>
+                </div>
+              </div>
+
+              <label class="sr-only" for="poll-subject-1">Poll 1 subject</label>
+              <input
+                id="poll-subject-1"
+                name="poll_subject"
+                placeholder="Maya + Jordan"
+                maxlength="280"
+                required
+              >
+
+              <div class="outcome-heading">
+                <span>Outcome choices</span>
+                <span class="default-chip">Default set</span>
+              </div>
+              <div class="outcome-list">
+                <label class="outcome-row outcome-yes">
+                  <span class="outcome-badge">YES</span>
+                  <input name="outcome" value="They get married.">
+                </label>
+                <label class="outcome-row">
+                  <span class="outcome-badge">NO</span>
+                  <input name="outcome" value="Someone says no at the altar.">
+                </label>
+                <label class="outcome-row">
+                  <span class="outcome-badge">NO</span>
+                  <input name="outcome" value="They break up before making it to the altar.">
+                </label>
+              </div>
+              <p class="poll-note">
+                The two NO answers share partial-credit scoring.
+              </p>
+            </article>
+          </div>
+
+          <button class="add-poll-button" type="button" id="add-poll">
+            <span class="add-icon" aria-hidden="true">+</span>
+            Add another prediction
+          </button>
+        </section>
+
+        <div class="builder-footer">
+          <p class="save-status" id="save-status" role="status">
+            <span aria-hidden="true">✓</span> Draft saved
+          </p>
+          <button class="primary-button open-game-button" type="submit">
+            <span>Open the game</span>
+            <span aria-hidden="true">→</span>
+          </button>
+          <p class="field-help footer-help">
+            Opening creates the join code. You can still add polls until voting starts.
+          </p>
+        </div>
+      </form>
+    </main>
+
+    <template id="poll-template">
+      <article class="poll-card" data-poll>
+        <div class="poll-card-header">
+          <div>
+            <span class="poll-kicker">Poll</span>
+            <h3>Prediction subject</h3>
+          </div>
+          <div class="poll-actions" aria-label="Poll actions">
+            <button type="button" data-move="up" aria-label="Move poll up">↑</button>
+            <button type="button" data-move="down" aria-label="Move poll down">↓</button>
+            <button type="button" data-remove aria-label="Remove poll">×</button>
+          </div>
+        </div>
+        <label class="sr-only">Poll subject</label>
+        <input name="poll_subject" placeholder="Couple or prediction topic" maxlength="280" required>
+        <div class="outcome-heading">
+          <span>Outcome choices</span>
+          <span class="default-chip">Default set</span>
+        </div>
+        <div class="outcome-list">
+          <label class="outcome-row outcome-yes">
+            <span class="outcome-badge">YES</span>
+            <input name="outcome" value="They get married.">
+          </label>
+          <label class="outcome-row">
+            <span class="outcome-badge">NO</span>
+            <input name="outcome" value="Someone says no at the altar.">
+          </label>
+          <label class="outcome-row">
+            <span class="outcome-badge">NO</span>
+            <input name="outcome" value="They break up before making it to the altar.">
+          </label>
+        </div>
+        <p class="poll-note">The two NO answers share partial-credit scoring.</p>
+      </article>
+    </template>
+
+    <div class="toast join-code-toast" id="builder-toast" role="status" hidden>
+      <strong>Game ready!</strong> Your join code will appear here once the backend is connected.
+    </div>
+  </body>
+</html>

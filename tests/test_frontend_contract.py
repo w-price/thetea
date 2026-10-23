@@ -4,6 +4,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 LANDING_PAGE = (ROOT / "index.html").read_text()
 FRONTEND_JS = (ROOT / "static" / "app.js").read_text()
+HOST_BUILDER = (ROOT / "host.html").read_text()
+HOST_JS = (ROOT / "static" / "host.js").read_text()
 
 
 def test_landing_page_exposes_primary_paths():
@@ -21,3 +23,19 @@ def test_registration_collects_returning_account_fields():
 
 def test_join_code_is_normalized_for_preview():
     assert '.toUpperCase().replace(/[^A-Z0-9]/g, "")' in FRONTEND_JS
+
+
+def test_host_builder_uses_approved_default_outcomes():
+    for outcome in (
+        "They get married.",
+        "Someone says no at the altar.",
+        "They break up before making it to the altar.",
+    ):
+        assert outcome in HOST_BUILDER
+
+
+def test_host_builder_supports_ordering_and_draft_feedback():
+    assert 'id="add-poll"' in HOST_BUILDER
+    assert 'data-move="up"' in HOST_BUILDER
+    assert "updatePollOrder" in HOST_JS
+    assert "Draft saved" in HOST_JS

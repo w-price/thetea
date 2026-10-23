@@ -7,6 +7,7 @@ const toast = document.querySelector("#preview-toast");
 
 let lastFocusedElement = null;
 let toastTimer = null;
+let pendingIntent = null;
 
 function setAuthView(view) {
   const showLogin = view === "login";
@@ -41,7 +42,10 @@ function showPreviewToast() {
 }
 
 document.querySelectorAll("[data-open-auth]").forEach((button) => {
-  button.addEventListener("click", () => openAuth(button.dataset.openAuth));
+  button.addEventListener("click", () => {
+    pendingIntent = button.textContent.includes("Host") ? "host" : null;
+    openAuth(button.dataset.openAuth);
+  });
 });
 
 document.querySelectorAll("[data-switch-auth]").forEach((button) => {
@@ -63,12 +67,17 @@ joinCode.addEventListener("input", () => {
 
 document.querySelector("#join-form").addEventListener("submit", (event) => {
   event.preventDefault();
+  pendingIntent = "join";
   openAuth("register");
 });
 
 document.querySelectorAll("[data-preview-form]").forEach((form) => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    if (pendingIntent === "host") {
+      window.location.href = "host.html";
+      return;
+    }
     closeAuth();
     showPreviewToast();
   });
