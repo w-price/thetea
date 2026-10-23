@@ -13,6 +13,7 @@ def test_schema_contains_expected_core_tables():
         "users",
         "games",
         "game_players",
+        "game_ballots",
         "polls",
         "answer_options",
         "predictions",
@@ -48,7 +49,7 @@ def test_one_prediction_and_result_per_poll():
 def test_contract_includes_core_player_and_host_actions():
     for path in (
         "/games/join",
-        "/polls/{poll_id}/prediction",
+        "/games/{game_id}/ballot",
         "/polls/{poll_id}/result",
         "/games/{game_id}/leaderboard",
     ):
@@ -62,8 +63,8 @@ def test_account_and_roster_contract_are_persistent_and_named():
 
 
 def test_predictions_are_final_and_unlock_only_aggregate_stats():
-    assert "submitted_at timestamptz" in SCHEMA
-    assert "prediction_already_final" in API_CONTRACT
+    assert "CREATE TABLE game_ballots" in SCHEMA
+    assert "ballot_already_final" in API_CONTRACT
     assert "/polls/{poll_id}/prediction-stats" in API_CONTRACT
     assert "choices are never exposed" in API_CONTRACT
 

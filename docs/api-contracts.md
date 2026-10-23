@@ -101,24 +101,36 @@ Create poll body:
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| `POST` | `/polls/{poll_id}/prediction` | Cast caller's final prediction |
+| `POST` | `/games/{game_id}/ballot` | Submit caller's complete final ballot |
 | `GET` | `/games/{game_id}/predictions/me` | Caller’s selections and scoring state |
 | `GET` | `/polls/{poll_id}/prediction-stats` | Aggregate first reveal after voting |
 
-Prediction body: `{"answer_option_id": "uuid"}`. Submission is accepted only
-while the game is open and the caller is an active member. The UI labels the
-action **Final vote** and warns that it cannot be changed. Retrying the same
-option returns the existing prediction; submitting a different option returns
-`409 prediction_already_final`.
+Ballot body:
+
+```json
+{
+  "predictions": [
+    {"poll_id": "uuid", "answer_option_id": "uuid"},
+    {"poll_id": "uuid", "answer_option_id": "uuid"}
+  ]
+}
+```
+
+Submission is accepted only while the game is open and the caller is an active
+member. Every current poll must appear exactly once. The UI labels the action
+**Submit final votes** and warns that the ballot cannot be changed. The ballot
+and all prediction rows commit in one transaction. Retrying an identical ballot
+returns the existing resource; submitting different answers returns
+`409 ballot_already_final`.
 
 Once the final vote commits, the response includes aggregate option totals and
 percentages for the first reveal:
 
 ```json
 {
-  "prediction": {
-    "poll_id": "uuid",
-    "answer_option_id": "uuid",
+  "ballot": {
+    "id": "uuid",
+    "game_id": "uuid",
     "submitted_at": "2026-10-23T20:10:00Z"
   },
   "group_stats": {

@@ -12,6 +12,8 @@ erDiagram
     users ||--o{ games : hosts
     users ||--o{ game_players : joins
     games ||--o{ game_players : includes
+    game_players ||--o| game_ballots : submits
+    game_ballots ||--|{ predictions : contains
     games ||--o{ polls : contains
     polls ||--|{ answer_options : offers
     users ||--o{ predictions : makes
@@ -79,6 +81,21 @@ or is removed.
 Primary key: (`game_id`, `user_id`). Indexes support one host per game and a
 user's game list.
 
+## Table: `game_ballots`
+
+One player's final, atomic submission for one game. A ballot and all of its
+prediction rows are inserted in the same transaction.
+
+| Column | Type | Null? | Default | Constraints / meaning |
+| --- | --- | --- | --- | --- |
+| `id` | `uuid` | No | `gen_random_uuid()` | Primary key |
+| `game_id` | `uuid` | No | — | Part of the FK to an active game membership |
+| `user_id` | `uuid` | No | — | Part of the FK to an active game membership |
+| `submitted_at` | `timestamptz` | No | `now()` | Final submission time |
+
+Unique key: (`game_id`, `user_id`). The (`id`, `user_id`) pair is also unique so
+every prediction can be guaranteed to belong to that user's ballot.
+
 ## Table: `polls`
 
 An ordered prediction question within a game.
@@ -127,15 +144,16 @@ One user's current answer for one poll, plus the points awarded after reveal.
 | Column | Type | Null? | Default | Constraints / meaning |
 | --- | --- | --- | --- | --- |
 | `id` | `uuid` | No | `gen_random_uuid()` | Primary key |
+| `ballot_id` | `uuid` | No | — | Composite FK with `user_id` to `game_ballots` |
 | `poll_id` | `uuid` | No | — | Poll being predicted; unique with `user_id` |
 | `user_id` | `uuid` | No | — | Foreign key to `users.id` |
 | `answer_option_id` | `uuid` | No | — | Selected option; composite FK ensures it belongs to `poll_id` |
 | `awarded_points` | `smallint` | Yes | — | Null before reveal, then a non-negative scoring snapshot |
-| `submitted_at` | `timestamptz` | No | `now()` | Final vote submission time |
 
-Unique key: (`poll_id`, `user_id`). Submission is final: the service returns the
-existing prediction for an identical retry and rejects a different answer. Poll
-options and scoring settings remain frozen while voting is open.
+Unique key: (`poll_id`, `user_id`). All rows are submitted with their parent
+ballot. Submission is final: the service returns the existing ballot for an
+identical retry and rejects different answers. Poll options and scoring settings
+remain frozen while voting is open.
 
 ## Table: `poll_results`
 
@@ -158,8 +176,10 @@ These rules cross multiple rows and are enforced in transactional service code:
 
 - `games.host_user_id` and the single host membership refer to the same user.
 - Every prediction belongs to an active member of the poll's game.
-- A prediction can be submitted only while the game is `open` and cannot be
-  changed after submission.
+- A complete ballot can be submitted only while the game is `open`; its
+  predictions cannot be changed after submission.
+- Ballot creation and all prediction inserts occur in one transaction. The
+  service rejects ballots that omit a poll or select multiple options per poll.
 - Polls, options, and scoring values become immutable when predictions lock.
 - Only the host can lock, reveal a result, or complete a game.
 - A result can be published only while the game is `locked` or `revealing`.

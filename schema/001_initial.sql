@@ -48,6 +48,20 @@ CREATE UNIQUE INDEX game_players_one_host_per_game
 
 CREATE INDEX game_players_user_id_idx ON game_players (user_id);
 
+CREATE TABLE game_ballots (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    game_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    submitted_at timestamptz NOT NULL DEFAULT now(),
+    UNIQUE (game_id, user_id),
+    UNIQUE (id, user_id),
+    FOREIGN KEY (game_id, user_id)
+        REFERENCES game_players(game_id, user_id) ON DELETE RESTRICT
+);
+
+CREATE INDEX game_ballots_game_id_idx ON game_ballots (game_id);
+CREATE INDEX game_ballots_user_id_idx ON game_ballots (user_id);
+
 CREATE TABLE polls (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     game_id uuid NOT NULL REFERENCES games(id) ON DELETE CASCADE,
@@ -79,12 +93,14 @@ CREATE INDEX answer_options_poll_id_idx ON answer_options (poll_id);
 
 CREATE TABLE predictions (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    ballot_id uuid NOT NULL,
     poll_id uuid NOT NULL,
     user_id uuid NOT NULL REFERENCES users(id),
     answer_option_id uuid NOT NULL,
     awarded_points smallint CHECK (awarded_points >= 0),
-    submitted_at timestamptz NOT NULL DEFAULT now(),
     UNIQUE (poll_id, user_id),
+    FOREIGN KEY (ballot_id, user_id)
+        REFERENCES game_ballots(id, user_id) ON DELETE RESTRICT,
     FOREIGN KEY (answer_option_id, poll_id)
         REFERENCES answer_options(id, poll_id) ON DELETE RESTRICT
 );

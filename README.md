@@ -13,7 +13,8 @@ frontend or Flask routes.
 
 - Users have accounts and may host or join many games.
 - Each game contains ordered polls with two or more answer options.
-- Players cast one final prediction per poll; submitted votes cannot be changed.
+- Players review and submit one complete final ballot; submitted votes cannot be
+  changed.
 - After voting, players can see aggregate prediction stats while the actual
   outcome remains hidden.
 - A host publishes one actual option per poll via **Spill the Tea**.

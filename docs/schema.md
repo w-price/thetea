@@ -16,6 +16,7 @@ and are stored in UTC.
 ```text
 users ──< games (host)
 users >──< games through game_players
+game_players ──0..1 game_ballots ──< predictions
 games ──< polls ──< answer_options
 users ──< predictions >── answer_options
 polls ──0..1 poll_results >── answer_options
@@ -70,7 +71,8 @@ and stable ordering within a game or poll.
 Authorization and lifecycle rules span multiple rows, so they remain service
 transactions rather than fragile database triggers. Examples: only the host may
 publish, a player must belong to the game, voting must be open, and an existing
-prediction cannot be changed.
+ballot cannot be changed. A ballot and all of its predictions are inserted in
+one transaction, so a failed request never leaves a partially submitted player.
 
 ### Joining
 
