@@ -83,8 +83,7 @@ CREATE TABLE predictions (
     user_id uuid NOT NULL REFERENCES users(id),
     answer_option_id uuid NOT NULL,
     awarded_points smallint CHECK (awarded_points >= 0),
-    predicted_at timestamptz NOT NULL DEFAULT now(),
-    updated_at timestamptz NOT NULL DEFAULT now(),
+    submitted_at timestamptz NOT NULL DEFAULT now(),
     UNIQUE (poll_id, user_id),
     FOREIGN KEY (answer_option_id, poll_id)
         REFERENCES answer_options(id, poll_id) ON DELETE RESTRICT

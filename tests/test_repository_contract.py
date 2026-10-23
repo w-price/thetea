@@ -60,3 +60,10 @@ def test_account_and_roster_contract_are_persistent_and_named():
     assert '"first_name": "Taylor"' in API_CONTRACT
     assert "Every joined player is returned" in API_CONTRACT
 
+
+def test_predictions_are_final_and_unlock_only_aggregate_stats():
+    assert "submitted_at timestamptz" in SCHEMA
+    assert "prediction_already_final" in API_CONTRACT
+    assert "/polls/{poll_id}/prediction-stats" in API_CONTRACT
+    assert "choices are never exposed" in API_CONTRACT
+

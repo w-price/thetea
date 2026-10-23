@@ -131,11 +131,11 @@ One user's current answer for one poll, plus the points awarded after reveal.
 | `user_id` | `uuid` | No | — | Foreign key to `users.id` |
 | `answer_option_id` | `uuid` | No | — | Selected option; composite FK ensures it belongs to `poll_id` |
 | `awarded_points` | `smallint` | Yes | — | Null before reveal, then a non-negative scoring snapshot |
-| `predicted_at` | `timestamptz` | No | `now()` | First prediction time |
-| `updated_at` | `timestamptz` | No | `now()` | Most recent permitted revision |
+| `submitted_at` | `timestamptz` | No | `now()` | Final vote submission time |
 
-Unique key: (`poll_id`, `user_id`). The service accepts revisions only while the
-game is open and freezes both options and scoring settings when the game locks.
+Unique key: (`poll_id`, `user_id`). Submission is final: the service returns the
+existing prediction for an identical retry and rejects a different answer. Poll
+options and scoring settings remain frozen while voting is open.
 
 ## Table: `poll_results`
 
@@ -158,11 +158,14 @@ These rules cross multiple rows and are enforced in transactional service code:
 
 - `games.host_user_id` and the single host membership refer to the same user.
 - Every prediction belongs to an active member of the poll's game.
-- Predictions can be created or revised only while the game is `open`.
+- A prediction can be submitted only while the game is `open` and cannot be
+  changed after submission.
 - Polls, options, and scoring values become immutable when predictions lock.
 - Only the host can lock, reveal a result, or complete a game.
 - A result can be published only while the game is `locked` or `revealing`.
 - Other players' predictions remain private until the relevant result is public.
+- Aggregate option counts and percentages become visible to a player only after
+  that player casts a final vote; individual answers remain private.
 - Every joined player appears in the game roster and leaderboard, including
   players with zero points or no scored predictions.
 

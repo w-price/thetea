@@ -28,7 +28,7 @@ polls ──0..1 poll_results >── answer_options
 `games.status` is one of:
 
 - `draft`: host is configuring the game; players cannot predict.
-- `open`: players may join and create or revise predictions.
+- `open`: players may join and cast one final prediction per poll.
 - `locked`: predictions are immutable; results are not yet being revealed.
 - `revealing`: at least one result may be published and the leaderboard updates.
 - `completed`: the host has finished the game.
@@ -69,7 +69,8 @@ and stable ordering within a game or poll.
 
 Authorization and lifecycle rules span multiple rows, so they remain service
 transactions rather than fragile database triggers. Examples: only the host may
-publish, a player must belong to the game, and predictions must be open.
+publish, a player must belong to the game, voting must be open, and an existing
+prediction cannot be changed.
 
 ### Joining
 

@@ -96,13 +96,42 @@ Create poll body:
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| `PUT` | `/polls/{poll_id}/prediction` | Create or replace caller's prediction |
+| `POST` | `/polls/{poll_id}/prediction` | Cast caller's final prediction |
 | `GET` | `/games/{game_id}/predictions/me` | Caller’s selections and scoring state |
+| `GET` | `/polls/{poll_id}/prediction-stats` | Aggregate first reveal after voting |
 
-Prediction body: `{"answer_option_id": "uuid"}`. `PUT` is idempotent and is
-accepted only while the game is open and the caller is an active member.
+Prediction body: `{"answer_option_id": "uuid"}`. Submission is accepted only
+while the game is open and the caller is an active member. The UI labels the
+action **Final vote** and warns that it cannot be changed. Retrying the same
+option returns the existing prediction; submitting a different option returns
+`409 prediction_already_final`.
 
-Other players' choices are not exposed before results publish.
+Once the final vote commits, the response includes aggregate option totals and
+percentages for the first reveal:
+
+```json
+{
+  "prediction": {
+    "poll_id": "uuid",
+    "answer_option_id": "uuid",
+    "submitted_at": "2026-10-23T20:10:00Z"
+  },
+  "group_stats": {
+    "headline": "The tea is brewing!",
+    "total_votes": 8,
+    "options": [
+      {"answer_option_id": "uuid", "votes": 5, "percentage": 62.5},
+      {"answer_option_id": "uuid", "votes": 2, "percentage": 25.0},
+      {"answer_option_id": "uuid", "votes": 1, "percentage": 12.5}
+    ]
+  }
+}
+```
+
+The stats endpoint is available to the host and to members who already cast a
+vote on that poll. It can update as more final votes arrive. Individual player
+choices are never exposed by this endpoint. The second reveal remains the actual
+outcome published through **Spill the Tea**.
 
 ## Spill the Tea
 
