@@ -56,6 +56,29 @@
             placeholder="For the group chat that has called every twist..."
             rows="3"
           ></textarea>
+
+          <div class="field-label-row">
+            <label for="game-password">Game password</label>
+            <span class="character-count" id="password-count">0/8</span>
+          </div>
+          <input
+            id="game-password"
+            class="game-password-input"
+            name="join_code"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+            autocapitalize="characters"
+            minlength="8"
+            maxlength="8"
+            pattern="[A-Za-z0-9]{8}"
+            placeholder="TEA4EVER"
+            aria-describedby="password-help"
+            required
+          >
+          <p class="field-help" id="password-help">
+            Choose 8 letters or numbers. Players will use this to join.
+          </p>
         </section>
 
         <section class="poll-builder-section" aria-labelledby="polls-title">
@@ -129,7 +152,7 @@
             <span aria-hidden="true">→</span>
           </button>
           <p class="field-help footer-help">
-            Opening creates the join code. You can still add polls until voting starts.
+            You can still add polls until voting starts.
           </p>
         </div>
       </form>

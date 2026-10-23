@@ -50,7 +50,7 @@ A hosted prediction party with one scoring policy and one lifecycle.
 | `host_user_id` | `uuid` | No | — | Foreign key to `users.id` |
 | `title` | `varchar(120)` | No | — | Trimmed length 1–120 |
 | `description` | `text` | Yes | — | Optional host-written summary |
-| `join_code` | `citext` | No | — | Unique eight-character letter/number code |
+| `join_code` | `citext` | No | — | Unique host-chosen eight-character game password |
 | `status` | `varchar(16)` | No | `draft` | `draft`, `open`, `locked`, `revealing`, or `completed` |
 | `exact_points` | `smallint` | No | `3` | Points for the exact option; non-negative |
 | `group_points` | `smallint` | No | `1` | Points for a different option in the same scoring group |

@@ -570,6 +570,29 @@ input:focus {
   margin-top: 17px;
 }
 
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 17px;
+}
+
+.field-label-row label {
+  margin: 0;
+}
+
+.character-count {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 850;
+}
+
+.game-password-input {
+  font-weight: 950;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
 .optional {
   margin-left: 4px;
   color: var(--muted);

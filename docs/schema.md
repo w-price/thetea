@@ -74,9 +74,11 @@ prediction cannot be changed.
 
 ### Joining
 
-Games expose a case-insensitive, eight-character `join_code`. Membership stores
-`joined`, `left`, or `removed` state rather than deleting history. Hosts receive
-a membership row as part of game creation.
+Games expose a host-chosen, case-insensitive, eight-character `join_code` as the
+player-facing **game password**. It accepts letters and numbers and is separate
+from account passwords. Membership stores `joined`, `left`, or `removed` state
+rather than deleting history. Hosts receive a membership row as part of game
+creation.
 
 ## Leaderboard query
 

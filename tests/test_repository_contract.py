@@ -67,3 +67,8 @@ def test_predictions_are_final_and_unlock_only_aggregate_stats():
     assert "/polls/{poll_id}/prediction-stats" in API_CONTRACT
     assert "choices are never exposed" in API_CONTRACT
 
+
+def test_game_password_is_host_chosen_and_eight_characters():
+    assert "join_code citext NOT NULL UNIQUE" in SCHEMA
+    assert "host-chosen, eight-character game password" in API_CONTRACT
+

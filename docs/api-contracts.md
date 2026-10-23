@@ -60,13 +60,18 @@ Create game body:
 {
   "title": "Season Finale Predictions",
   "description": "Pick each couple's outcome.",
+  "join_code": "TEA4EVER",
   "exact_points": 3,
   "group_points": 1,
   "incorrect_points": 0
 }
 ```
 
-Join body: `{"join_code": "TEA4ABCD"}`.
+`join_code` is the host-chosen, eight-character game password. The service
+uppercases it, accepts only letters and numbers, and returns `409 join_code_taken`
+if another active game already uses it.
+
+Join body: `{"join_code": "TEA4EVER"}`.
 
 ## Poll configuration
 

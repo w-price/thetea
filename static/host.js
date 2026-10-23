@@ -3,6 +3,8 @@ const pollList = document.querySelector("#poll-list");
 const pollTemplate = document.querySelector("#poll-template");
 const saveStatus = document.querySelector("#save-status");
 const builderToast = document.querySelector("#builder-toast");
+const gamePassword = document.querySelector("#game-password");
+const passwordCount = document.querySelector("#password-count");
 
 let saveTimer = null;
 let toastTimer = null;
@@ -71,6 +73,13 @@ pollList.addEventListener("click", (event) => {
 });
 
 builder.addEventListener("input", showSavingState);
+
+gamePassword.addEventListener("input", () => {
+  gamePassword.value = gamePassword.value
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "");
+  passwordCount.textContent = `${gamePassword.value.length}/8`;
+});
 
 builder.addEventListener("submit", (event) => {
   event.preventDefault();

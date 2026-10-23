@@ -39,3 +39,10 @@ def test_host_builder_supports_ordering_and_draft_feedback():
     assert 'data-move="up"' in HOST_BUILDER
     assert "updatePollOrder" in HOST_JS
     assert "Draft saved" in HOST_JS
+
+
+def test_host_chooses_an_eight_character_game_password():
+    assert 'id="game-password"' in HOST_BUILDER
+    assert 'minlength="8"' in HOST_BUILDER
+    assert 'maxlength="8"' in HOST_BUILDER
+    assert '.replace(/[^A-Z0-9]/g, "")' in HOST_JS
