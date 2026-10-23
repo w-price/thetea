@@ -32,6 +32,7 @@ const ballotScreen = document.querySelector("#ballot-screen");
 const roomScreen = document.querySelector("#room-screen");
 const dramaSheet = document.querySelector("#drama-sheet");
 const dramaBackdrop = document.querySelector("#drama-backdrop");
+const playerFinalScreen = document.querySelector("#player-final-screen");
 
 let currentPollIndex = 0;
 let isReviewing = false;
@@ -200,6 +201,7 @@ function startRoomUpdates() {
     }, 5600),
   );
   roomTimers.push(setTimeout(showPublishedResult, 8400));
+  roomTimers.push(setTimeout(showPlayerFinal, 11800));
 }
 
 function pointsForFirstResult(outcomeId) {
@@ -255,6 +257,117 @@ function showPublishedResult() {
   addActivity("☕", "The host spilled the tea.", "Maya + Jordan scores are now live.");
 }
 
+function rankFinalPlayers(finalPlayers) {
+  const sorted = [...finalPlayers].sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
+  return sorted.map((player) => ({
+    ...player,
+    rank: sorted.findIndex((entry) => entry.points === player.points) + 1,
+  }));
+}
+
+function finalShareText(ranked, winners) {
+  const standings = ranked.map((player) => `${player.rank}. ${player.name} — ${player.points} pts`).join("\n");
+  return `The Tea is officially spilled ☕\n${winners.join(" & ")} share the crown!\n\n${standings}`;
+}
+
+async function sharePlayerResults(button, ranked, winners) {
+  const text = finalShareText(ranked, winners);
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: "The Tea — final results", text });
+      button.querySelector("span:first-child").textContent = "Results shared!";
+    } else {
+      await navigator.clipboard.writeText(text);
+      button.querySelector("span:first-child").textContent = "Results copied!";
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") button.querySelector("span:first-child").textContent = "Try sharing again";
+  }
+}
+
+function showPlayerFinal() {
+  const finalPlayers = [
+    { name: "Taylor", initial: "T", points: 9, current: true },
+    { name: "Maya", initial: "M", points: 9 },
+    { name: "Chris", initial: "C", points: 3 },
+    { name: "Jordan", initial: "J", points: 3 },
+    { name: "Riley", initial: "R", points: 3 },
+    { name: "Sasha", initial: "S", points: 0 },
+  ];
+  const ranked = rankFinalPlayers(finalPlayers);
+  const currentPlayer = ranked.find((player) => player.current);
+  const winners = ranked.filter((player) => player.rank === 1);
+  const everyoneElse = ranked.filter((player) => !player.current && player.rank !== 1);
+
+  document.querySelector(".game-meta").hidden = true;
+  roomScreen.hidden = true;
+  playerFinalScreen.hidden = false;
+  document.querySelector(".status-pill").classList.remove("live-pill");
+  document.querySelector(".status-pill").innerHTML = '<span aria-hidden="true">♛</span> Complete';
+
+  playerFinalScreen.innerHTML = `
+    <header class="player-final-heading">
+      <p class="eyebrow">That’s the tea</p>
+      <h1 id="player-final-title">The crowns are claimed.</h1>
+      <p>The results are locked, and the group chat has receipts.</p>
+    </header>
+
+    <section class="player-winners" aria-labelledby="player-winners-title">
+      <div class="winner-crown" aria-hidden="true">♛</div>
+      <p class="step-label">${winners.length > 1 ? "Reigning royalty" : "Tonight’s winner"}</p>
+      <h2 id="player-winners-title">${winners.map((winner) => winner.name).join(" & ")}</h2>
+      <p>${winners.length > 1 ? "share the crown" : "takes the crown"} · ${winners[0].points} points</p>
+      <div class="winner-avatars">
+        ${winners.map((winner) => `<span aria-label="${winner.name}">${winner.initial}</span>`).join("")}
+      </div>
+    </section>
+
+    <section class="player-night-card" aria-labelledby="your-night-title">
+      <div class="player-night-heading">
+        <div><p class="step-label">Your night</p><h2 id="your-night-title">You finished #${currentPlayer.rank}</h2></div>
+        <strong>${currentPlayer.points}<small>points</small></strong>
+      </div>
+      <div class="player-stat-grid">
+        <div><strong>3</strong><span>Exact calls</span><small>+9 points</small></div>
+        <div><strong>0</strong><span>Right ending</span><small>+0 points</small></div>
+        <div><strong>2</strong><span>Plot twists</span><small>0 points</small></div>
+      </div>
+      <p class="player-verdict">Three exact calls? You didn’t predict the drama—you produced it.</p>
+    </section>
+
+    <section class="everyone-else-card" aria-labelledby="everyone-else-title">
+      <div class="room-card-heading">
+        <div><p class="step-label">The rest of the room</p><h2 id="everyone-else-title">Everyone else</h2></div>
+        <span>${ranked.length} players</span>
+      </div>
+      <div class="player-final-ranking">
+        ${everyoneElse
+          .map(
+            (player) => `
+              <div class="player-final-row">
+                <span>${player.rank}</span>
+                <span class="leader-avatar">${player.initial}</span>
+                <strong>${player.name}</strong>
+                <b>${player.points}<small> pts</small></b>
+              </div>
+            `,
+          )
+          .join("")}
+      </div>
+    </section>
+
+    <button class="primary-button player-share-button" type="button" id="player-share-results">
+      <span>Share the final results</span><span aria-hidden="true">↗</span>
+    </button>
+    <a class="final-home-link" href="index.html">Back to The Tea</a>
+  `;
+
+  document.querySelector("#player-share-results").addEventListener("click", (event) => {
+    sharePlayerResults(event.currentTarget, ranked, winners.map((winner) => winner.name));
+  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function submitBallot() {
   ballotScreen.hidden = true;
   roomScreen.hidden = false;
@@ -307,3 +420,8 @@ document.addEventListener("keydown", (event) => {
 });
 
 renderPoll();
+
+if (new URLSearchParams(window.location.search).get("view") === "final") {
+  ballotScreen.hidden = true;
+  showPlayerFinal();
+}

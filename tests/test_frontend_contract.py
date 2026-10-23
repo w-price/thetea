@@ -69,6 +69,16 @@ def test_post_vote_room_contains_social_feedback_loops():
     assert "player-prediction-groups" in PLAY_JS
 
 
+def test_player_final_prioritizes_winners_personal_stats_then_everyone_else():
+    assert 'id="player-final-screen"' in PLAY_PAGE
+    assert "Reigning royalty" in PLAY_JS
+    assert "Your night" in PLAY_JS
+    assert "Exact calls" in PLAY_JS
+    assert "Right ending" in PLAY_JS
+    assert "Everyone else" in PLAY_JS
+    assert "rankFinalPlayers" in PLAY_JS
+
+
 def test_host_reveal_is_confirmed_final_and_publishes_named_predictions():
     assert "Spill this as the final result?" in REVEAL_PAGE
     assert "cannot be undone" in REVEAL_PAGE

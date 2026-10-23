@@ -1627,6 +1627,240 @@ input:focus {
   font-weight: 950;
 }
 
+.player-final-screen {
+  padding: 30px 0 12px;
+  text-align: center;
+}
+
+.player-final-heading {
+  padding: 0 8px 23px;
+}
+
+.player-final-heading h1 {
+  margin-bottom: 10px;
+  font-size: clamp(2.6rem, 13vw, 4.15rem);
+  line-height: 0.91;
+}
+
+.player-final-heading > p:last-child {
+  max-width: 390px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.player-winners,
+.player-night-card,
+.everyone-else-card {
+  position: relative;
+  margin-top: 13px;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 80%);
+  border-radius: 29px;
+  background: rgb(255 249 244 / 94%);
+  box-shadow: var(--shadow);
+}
+
+.player-winners {
+  padding: 29px 20px 25px;
+  border-color: rgb(233 177 54 / 38%);
+  background:
+    radial-gradient(circle at 8% 8%, rgb(243 79 157 / 16%), transparent 12rem),
+    radial-gradient(circle at 92% 5%, rgb(248 205 88 / 26%), transparent 12rem),
+    rgb(255 249 244 / 96%);
+}
+
+.player-winners .winner-crown {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+  font-size: 1.7rem;
+}
+
+.player-winners .step-label {
+  margin-bottom: 5px;
+}
+
+.player-winners h2 {
+  margin-bottom: 3px;
+  font-size: 2.35rem;
+}
+
+.player-winners > p:not(.step-label) {
+  margin-bottom: 17px;
+  color: var(--muted);
+  font-size: 0.71rem;
+  font-weight: 850;
+}
+
+.winner-avatars {
+  display: flex;
+  justify-content: center;
+  padding-left: 10px;
+}
+
+.winner-avatars span {
+  display: grid;
+  width: 45px;
+  height: 45px;
+  margin-left: -10px;
+  place-items: center;
+  border: 3px solid var(--cream);
+  border-radius: 50%;
+  color: var(--white);
+  background: linear-gradient(145deg, var(--pink), var(--plum));
+  font-size: 0.77rem;
+  font-weight: 950;
+  box-shadow: 0 9px 20px rgb(121 39 94 / 16%);
+}
+
+.player-night-card,
+.everyone-else-card {
+  padding: 21px 18px;
+  text-align: left;
+}
+
+.player-night-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.player-night-heading .step-label,
+.player-night-heading h2 {
+  margin-bottom: 0;
+}
+
+.player-night-heading h2 {
+  margin-top: 3px;
+  font-size: 1.7rem;
+}
+
+.player-night-heading > strong {
+  display: grid;
+  min-width: 65px;
+  color: var(--plum);
+  font-family: var(--display);
+  font-size: 2rem;
+  line-height: 0.8;
+  text-align: center;
+}
+
+.player-night-heading > strong small {
+  margin-top: 7px;
+  color: var(--muted);
+  font-family: var(--body);
+  font-size: 0.55rem;
+  text-transform: uppercase;
+}
+
+.player-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-top: 18px;
+}
+
+.player-stat-grid > div {
+  display: grid;
+  gap: 3px;
+  padding: 13px 8px;
+  border-radius: 16px;
+  background: var(--pink-soft);
+  text-align: center;
+}
+
+.player-stat-grid strong {
+  color: var(--plum);
+  font-family: var(--display);
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.player-stat-grid span {
+  font-size: 0.61rem;
+  font-weight: 900;
+}
+
+.player-stat-grid small {
+  color: var(--muted);
+  font-size: 0.52rem;
+}
+
+.player-verdict {
+  margin: 14px 2px 0;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.everyone-else-card .room-card-heading {
+  margin-bottom: 12px;
+}
+
+.everyone-else-card .room-card-heading h2 {
+  margin: 3px 0 0;
+  font-size: 1.65rem;
+}
+
+.everyone-else-card .room-card-heading > span {
+  color: var(--muted);
+  font-size: 0.61rem;
+  font-weight: 850;
+}
+
+.player-final-ranking {
+  display: grid;
+  gap: 7px;
+}
+
+.player-final-row {
+  display: grid;
+  grid-template-columns: 25px 36px 1fr auto;
+  gap: 9px;
+  align-items: center;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: rgb(255 255 255 / 68%);
+}
+
+.player-final-row > span:first-child {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 950;
+  text-align: center;
+}
+
+.player-final-row .leader-avatar {
+  width: 34px;
+  height: 34px;
+}
+
+.player-final-row > strong {
+  font-size: 0.72rem;
+}
+
+.player-final-row > b {
+  color: var(--plum);
+  font-size: 0.8rem;
+}
+
+.player-final-row > b small {
+  color: var(--muted);
+  font-size: 0.51rem;
+}
+
+.player-share-button {
+  margin-top: 17px;
+}
+
+.player-final-screen > .final-home-link {
+  margin-top: 18px;
+}
+
 .drama-sheet {
   position: fixed;
   z-index: 11;
