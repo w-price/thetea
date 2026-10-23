@@ -74,3 +74,11 @@ def test_host_reveal_is_confirmed_final_and_publishes_named_predictions():
     assert "cannot be undone" in REVEAL_PAGE
     assert "Who called what" in REVEAL_JS
     assert "pointsFor" in REVEAL_JS
+
+
+def test_host_explicitly_ends_game_and_sees_shareable_full_group_scorecard():
+    assert "End the game and crown the winner?" in REVEAL_PAGE
+    assert "End game &amp; crown winners" in REVEAL_PAGE
+    assert "Share the full scorecard" in REVEAL_JS
+    assert "rankedScores" in REVEAL_JS
+    assert "share the crown" in REVEAL_JS

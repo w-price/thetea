@@ -63,6 +63,8 @@ const scores = new Map([
 const spillCard = document.querySelector("#spill-card");
 const confirmSheet = document.querySelector("#confirm-sheet");
 const confirmBackdrop = document.querySelector("#confirm-backdrop");
+const completeSheet = document.querySelector("#complete-sheet");
+const completeBackdrop = document.querySelector("#complete-backdrop");
 let revealIndex = 0;
 let selectedResult = null;
 let isRevealed = false;
@@ -94,6 +96,15 @@ function renderMiniLeaderboard() {
   document.querySelector("#leaderboard-status").textContent = topScore
     ? `${leaders[0][0]} leads with ${topScore}`
     : "Everyone’s tied at zero";
+}
+
+function rankedScores() {
+  const sorted = [...scores.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  return sorted.map(([name, points]) => ({
+    name,
+    points,
+    rank: sorted.findIndex((entry) => entry[1] === points) + 1,
+  }));
 }
 
 function renderHostReveal() {
@@ -167,6 +178,19 @@ function closeConfirmation() {
   document.body.style.overflow = "";
 }
 
+function openCompleteConfirmation() {
+  completeSheet.hidden = false;
+  completeBackdrop.hidden = false;
+  document.body.style.overflow = "hidden";
+  document.querySelector("#cancel-complete").focus();
+}
+
+function closeCompleteConfirmation() {
+  completeSheet.hidden = true;
+  completeBackdrop.hidden = true;
+  document.body.style.overflow = "";
+}
+
 function applyScores() {
   const poll = revealPolls[revealIndex];
   revealOutcomes.forEach((outcome) => {
@@ -212,10 +236,77 @@ function renderPublishedResult() {
         .join("")}
     </div>
     <button class="primary-button spill-button" type="button" id="next-reveal">
-      <span>${revealIndex === revealPolls.length - 1 ? "Crown the winner" : "Next reveal"}</span>
+      <span>${revealIndex === revealPolls.length - 1 ? "End game & crown winners" : "Next reveal"}</span>
       <span aria-hidden="true">→</span>
     </button>
   `;
+}
+
+function shareText(ranked, winnerNames) {
+  const podium = ranked.map((player) => `${player.rank}. ${player.name} — ${player.points} pts`).join("\n");
+  const crownLine = winnerNames.length > 1
+    ? `${winnerNames.join(" & ")} share the crown!`
+    : `${winnerNames[0]} takes the crown!`;
+  return `The Tea is officially spilled ☕\n${crownLine}\n\n${podium}`;
+}
+
+async function shareFinalScorecard(button, ranked, winnerNames) {
+  const text = shareText(ranked, winnerNames);
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: "The Tea — final results", text });
+      button.querySelector("span:first-child").textContent = "Scorecard shared!";
+    } else {
+      await navigator.clipboard.writeText(text);
+      button.querySelector("span:first-child").textContent = "Results copied!";
+    }
+  } catch (error) {
+    if (error.name !== "AbortError") button.querySelector("span:first-child").textContent = "Try sharing again";
+  }
+}
+
+function renderFinalCelebration() {
+  const ranked = rankedScores();
+  const winnerNames = ranked.filter((player) => player.rank === 1).map((player) => player.name);
+  const sharedCrown = winnerNames.length > 1;
+
+  document.querySelector("#reveal-page-title").textContent = "That’s the tea.";
+  document.querySelector(".reveal-meta .eyebrow").textContent = "Game complete";
+  document.querySelector(".reveal-meta .hero-copy").textContent = "The final leaderboard is locked. Screenshot it, share it, start the group chat.";
+  document.querySelector(".host-score-strip").hidden = true;
+  document.querySelector(".reveal-progress").hidden = true;
+
+  spillCard.className = "spill-card final-scorecard";
+  spillCard.innerHTML = `
+    <div class="confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="winner-crown" aria-hidden="true">♛</div>
+    <p class="eyebrow">${sharedCrown ? "Our reigning royalty" : "Tonight’s tea queen"}</p>
+    <h2>${sharedCrown ? `${winnerNames.join(" & ")} share the crown!` : `${winnerNames[0]} takes the crown!`}</h2>
+    <p class="winner-score">${ranked[0].points} points · ${revealPolls.length} reveals</p>
+    <div class="final-ranking" aria-label="Final group ranking">
+      ${ranked
+        .map(
+          (player) => `
+            <div class="final-rank-row ${player.rank === 1 ? "is-winner" : ""}">
+              <span class="final-rank-number">${player.rank === 1 ? "♛" : player.rank}</span>
+              <span class="leader-avatar">${player.name[0]}</span>
+              <span><strong>${player.name}</strong><small>${player.rank === 1 ? "Crowned winner" : "Final score"}</small></span>
+              <b>${player.points}<small>pts</small></b>
+            </div>
+          `,
+        )
+        .join("")}
+    </div>
+    <button class="primary-button share-scorecard" type="button" id="share-scorecard">
+      <span>Share the full scorecard</span><span aria-hidden="true">↗</span>
+    </button>
+    <a class="final-home-link" href="index.html">Start another game</a>
+  `;
+
+  document.querySelector("#share-scorecard").addEventListener("click", (event) => {
+    shareFinalScorecard(event.currentTarget, ranked, winnerNames);
+  });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 spillCard.addEventListener("click", (event) => {
@@ -240,12 +331,20 @@ spillCard.addEventListener("click", (event) => {
       isRevealed = false;
       renderHostReveal();
       window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      openCompleteConfirmation();
     }
   }
 });
 
 document.querySelector("#cancel-result").addEventListener("click", closeConfirmation);
 confirmBackdrop.addEventListener("click", closeConfirmation);
+document.querySelector("#cancel-complete").addEventListener("click", closeCompleteConfirmation);
+completeBackdrop.addEventListener("click", closeCompleteConfirmation);
+document.querySelector("#confirm-complete").addEventListener("click", () => {
+  closeCompleteConfirmation();
+  renderFinalCelebration();
+});
 
 document.querySelector("#confirm-result-button").addEventListener("click", () => {
   closeConfirmation();

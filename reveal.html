@@ -61,5 +61,26 @@
         </button>
       </div>
     </section>
+
+    <div class="auth-backdrop" id="complete-backdrop" hidden></div>
+    <section
+      class="confirm-sheet complete-sheet"
+      id="complete-sheet"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="complete-title"
+      hidden
+    >
+      <span class="confirm-icon" aria-hidden="true">♛</span>
+      <p class="eyebrow">Every result is in</p>
+      <h2 id="complete-title">End the game and crown the winner?</h2>
+      <p class="confirm-warning">This freezes the final leaderboard for everyone in the room.</p>
+      <div class="confirm-actions">
+        <button class="back-button" id="cancel-complete" type="button">Not yet</button>
+        <button class="primary-button" id="confirm-complete" type="button">
+          <span>End game &amp; crown winners</span><span aria-hidden="true">♛</span>
+        </button>
+      </div>
+    </section>
   </body>
 </html>
