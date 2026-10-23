@@ -55,7 +55,11 @@ database.
 
 Before frontend or backend implementation, review:
 
-1. [Schema decisions](docs/schema.md)
-2. [API contracts](docs/api-contracts.md)
-3. [Initial migration](schema/001_initial.sql)
+1. [Human-readable schema artifact](schema.md)
+2. [Schema decisions](docs/schema.md)
+3. [API contracts](docs/api-contracts.md)
+4. [Initial migration](schema/001_initial.sql)
+
+`schema.md` and the executable migrations are updated together in every schema
+change.
 

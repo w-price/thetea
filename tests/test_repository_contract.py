@@ -1,8 +1,10 @@
+import re
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = (ROOT / "schema" / "001_initial.sql").read_text()
+SCHEMA_ARTIFACT = (ROOT / "schema.md").read_text()
 API_CONTRACT = (ROOT / "docs" / "api-contracts.md").read_text()
 
 
@@ -17,6 +19,14 @@ def test_schema_contains_expected_core_tables():
         "poll_results",
     ):
         assert f"CREATE TABLE {table}" in SCHEMA
+
+
+def test_schema_artifact_lists_every_sql_table():
+    sql_tables = set(re.findall(r"CREATE TABLE (\w+)", SCHEMA))
+    documented_tables = set(
+        re.findall(r"^## Table: `([a-z_]+)`$", SCHEMA_ARTIFACT, re.MULTILINE)
+    )
+    assert documented_tables == sql_tables
 
 
 def test_option_belongs_to_prediction_poll():

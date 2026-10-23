@@ -1,5 +1,9 @@
 # Database schema
 
+The canonical table-by-table artifact is [`../schema.md`](../schema.md). This
+document records the reasoning behind that schema. Both documents and the
+executable migration must change together whenever the schema changes.
+
 ## Design goals
 
 The schema keeps the game engine generic while allowing a theme to provide its
