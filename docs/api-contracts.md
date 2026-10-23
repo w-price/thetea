@@ -35,8 +35,12 @@ allowed, `404` missing resource, `409` state conflict, and `422` field errors.
 Registration body:
 
 ```json
-{"email": "player@example.com", "display_name": "Taylor", "password": "..."}
+{"email": "player@example.com", "first_name": "Taylor", "password": "..."}
 ```
+
+Login body: `{"email": "player@example.com", "password": "..."}`. Accounts
+are persistent so players can return for later games. The password is never
+returned or logged and is stored only as a modern password hash.
 
 ## Games and membership
 
@@ -124,7 +128,7 @@ absent from the MVP contract and will require an explicit audited design.
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| `GET` | `/games/{game_id}/leaderboard` | Current ranked active members |
+| `GET` | `/games/{game_id}/leaderboard` | Live roster and ranked active members |
 
 Example response:
 
@@ -138,7 +142,7 @@ Example response:
     {
       "rank": 1,
       "user_id": "uuid",
-      "display_name": "Taylor",
+      "first_name": "Taylor",
       "points": 7,
       "scored_predictions": 3,
       "is_current_user": true
@@ -147,7 +151,10 @@ Example response:
 }
 ```
 
-The mobile client polls every 3 seconds while a game is revealing, pauses when
-the page is hidden, and performs one immediate refresh on visibility/focus. The
-endpoint may later honor `If-Modified-Since` or ETags without changing its body.
+Every joined player is returned, including players with zero points and players
+who skipped a poll. Before the first reveal this response functions as the live
+guest roster. The mobile client polls every 3 seconds while a game is open or
+revealing, pauses when the page is hidden, and performs one immediate refresh on
+visibility/focus. The endpoint may later honor `If-Modified-Since` or ETags
+without changing its body.
 

@@ -54,3 +54,9 @@ def test_contract_includes_core_player_and_host_actions():
     ):
         assert path in API_CONTRACT
 
+
+def test_account_and_roster_contract_are_persistent_and_named():
+    assert "first_name varchar(80)" in SCHEMA
+    assert '"first_name": "Taylor"' in API_CONTRACT
+    assert "Every joined player is returned" in API_CONTRACT
+

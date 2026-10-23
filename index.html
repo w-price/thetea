@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="The Tea is a social prediction game for watch parties and big moments."
+    >
+    <title>The Tea — Call it before it happens</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="static/app.js" defer></script>
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="site-header" aria-label="The Tea">
+        <a class="wordmark" href="#" aria-label="The Tea home">
+          <span class="wordmark-mark" aria-hidden="true">t</span>
+          <span>the tea</span>
+        </a>
+        <button class="text-button" type="button" data-open-auth="login">
+          Sign in
+        </button>
+      </header>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <p class="eyebrow"><span aria-hidden="true">✦</span> A prediction party</p>
+        <h1 id="hero-title">Call it before the tea spills.</h1>
+        <p class="hero-copy">
+          Make your picks, watch together, and see who really knows what's
+          coming next.
+        </p>
+      </section>
+
+      <section class="action-card" aria-labelledby="play-heading">
+        <div class="action-card-heading">
+          <p class="step-label">Ready to play?</p>
+          <h2 id="play-heading">Start a game or join your people.</h2>
+        </div>
+
+        <button class="primary-button" type="button" data-open-auth="register">
+          <span>Host a game</span>
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <div class="divider"><span>or join one</span></div>
+
+        <form class="join-form" id="join-form">
+          <label for="join-code">Game code</label>
+          <div class="join-row">
+            <input
+              id="join-code"
+              name="join_code"
+              type="text"
+              inputmode="text"
+              autocomplete="off"
+              autocapitalize="characters"
+              maxlength="8"
+              pattern="[A-Za-z0-9]{8}"
+              placeholder="TEA4ABCD"
+              aria-describedby="join-help"
+              required
+            >
+            <button class="secondary-button" type="submit">Join</button>
+          </div>
+          <p class="field-help" id="join-help">Ask your host for the 8-character code.</p>
+        </form>
+      </section>
+
+      <section class="party-preview" aria-label="Sample game activity">
+        <div class="avatar-stack" aria-hidden="true">
+          <span class="avatar avatar-plum">T</span>
+          <span class="avatar avatar-coral">M</span>
+          <span class="avatar avatar-gold">J</span>
+          <span class="avatar avatar-cream">+4</span>
+        </div>
+        <p><strong>Everyone's in.</strong> Picks stay secret until the reveal.</p>
+      </section>
+    </main>
+
+    <div class="auth-backdrop" id="auth-backdrop" hidden></div>
+    <section
+      class="auth-sheet"
+      id="auth-sheet"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="auth-title"
+      hidden
+    >
+      <button class="close-button" type="button" id="close-auth" aria-label="Close">
+        ×
+      </button>
+
+      <div class="auth-view" id="register-view">
+        <p class="eyebrow">Your seat is waiting</p>
+        <h2 id="auth-title">Create your account.</h2>
+        <p class="auth-copy">Come back for every watch party—and defend your record.</p>
+        <form class="auth-form" data-preview-form>
+          <label for="first-name">First name</label>
+          <input id="first-name" name="first_name" autocomplete="given-name" required>
+
+          <label for="register-email">Email</label>
+          <input
+            id="register-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+          >
+
+          <label for="register-password">Password</label>
+          <input
+            id="register-password"
+            name="password"
+            type="password"
+            autocomplete="new-password"
+            minlength="8"
+            required
+          >
+          <p class="field-help">Use at least 8 characters.</p>
+
+          <button class="primary-button" type="submit">Create account</button>
+        </form>
+        <p class="switch-copy">
+          Already have an account?
+          <button class="inline-button" type="button" data-switch-auth="login">
+            Sign in
+          </button>
+        </p>
+      </div>
+
+      <div class="auth-view" id="login-view" hidden>
+        <p class="eyebrow">Welcome back</p>
+        <h2>Sign in and make your picks.</h2>
+        <p class="auth-copy">Your games and bragging rights are right where you left them.</p>
+        <form class="auth-form" data-preview-form>
+          <label for="login-email">Email</label>
+          <input
+            id="login-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+          >
+
+          <label for="login-password">Password</label>
+          <input
+            id="login-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          >
+
+          <button class="primary-button" type="submit">Sign in</button>
+        </form>
+        <p class="switch-copy">
+          New to The Tea?
+          <button class="inline-button" type="button" data-switch-auth="register">
+            Create an account
+          </button>
+        </p>
+      </div>
+    </section>
+
+    <div class="toast" id="preview-toast" role="status" hidden>
+      Looks good—account connection comes in the backend phase.
+    </div>
+  </body>
+</html>

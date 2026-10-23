@@ -79,10 +79,12 @@ a membership row as part of game creation.
 
 ## Leaderboard query
 
-The MVP leaderboard is the sum of non-null `awarded_points` for each active
-member. The API also returns the number of predictions scored and applies stable
-tie ordering: points descending, scored predictions descending, join time
-ascending, user ID ascending.
+The MVP leaderboard includes every active member from the moment they join. Its
+score is the sum of non-null `awarded_points`, defaulting to zero before any
+result is revealed. The API also returns the number of predictions scored and
+applies stable tie ordering: points descending, scored predictions descending,
+join time ascending, user ID ascending. This endpoint doubles as the live player
+roster so everyone can see who has arrived.
 
 ## Deferred deliberately
 

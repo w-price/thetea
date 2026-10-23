@@ -34,7 +34,7 @@ Registered accounts used by both hosts and players.
 | --- | --- | --- | --- | --- |
 | `id` | `uuid` | No | `gen_random_uuid()` | Primary key |
 | `email` | `citext` | No | — | Unique, case-insensitive login identity |
-| `display_name` | `varchar(80)` | No | — | Trimmed length 1–80 |
+| `first_name` | `varchar(80)` | No | — | Trimmed length 1–80; shown in rosters and leaderboards |
 | `password_hash` | `text` | No | — | Password hash only; never plaintext |
 | `is_active` | `boolean` | No | `true` | Flask-Login account state |
 | `created_at` | `timestamptz` | No | `now()` | Creation time |
@@ -163,4 +163,6 @@ These rules cross multiple rows and are enforced in transactional service code:
 - Only the host can lock, reveal a result, or complete a game.
 - A result can be published only while the game is `locked` or `revealing`.
 - Other players' predictions remain private until the relevant result is public.
+- Every joined player appears in the game roster and leaderboard, including
+  players with zero points or no scored predictions.
 

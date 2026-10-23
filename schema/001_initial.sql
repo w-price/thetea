@@ -6,7 +6,7 @@ CREATE EXTENSION IF NOT EXISTS citext;
 CREATE TABLE users (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     email citext NOT NULL UNIQUE,
-    display_name varchar(80) NOT NULL CHECK (length(btrim(display_name)) BETWEEN 1 AND 80),
+    first_name varchar(80) NOT NULL CHECK (length(btrim(first_name)) BETWEEN 1 AND 80),
     password_hash text NOT NULL,
     is_active boolean NOT NULL DEFAULT true,
     created_at timestamptz NOT NULL DEFAULT now(),
