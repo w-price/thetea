@@ -73,6 +73,36 @@ if another active game already uses it.
 
 Join body: `{"join_code": "TEA4EVER"}`.
 
+Completing a game is a separate, explicit host action after every poll has a
+published result. It changes the game from `revealing` to `completed`, records
+`completed_at`, and freezes the final ranking. Calling it again returns the same
+completed resource; calling it before every result is published returns
+`409 results_incomplete`.
+
+The completion response is the shareable full-group scorecard:
+
+```json
+{
+  "game_id": "uuid",
+  "status": "completed",
+  "completed_at": "2026-10-23T22:15:00Z",
+  "winners": [
+    {"user_id": "uuid", "first_name": "Taylor", "points": 11},
+    {"user_id": "uuid", "first_name": "Maya", "points": 11}
+  ],
+  "leaders": [
+    {"rank": 1, "user_id": "uuid", "first_name": "Taylor", "points": 11},
+    {"rank": 1, "user_id": "uuid", "first_name": "Maya", "points": 11},
+    {"rank": 3, "user_id": "uuid", "first_name": "Jordan", "points": 8}
+  ]
+}
+```
+
+Every player tied at the highest score is returned in `winners`. Each shares the crown.
+Equal scores receive the same rank; the next rank skips the tied places.
+Completed-game leaderboard reads return this same frozen ordering so hosts and
+players see one canonical final scorecard.
+
 ## Poll configuration
 
 Draft-only host endpoints:

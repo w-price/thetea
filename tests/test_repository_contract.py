@@ -79,3 +79,10 @@ def test_named_predictions_unlock_only_after_result_publication():
     assert '"prediction_groups"' in API_CONTRACT
     assert "Names are revealed only for the published poll" in API_CONTRACT
 
+
+def test_host_completion_freezes_group_scorecard_and_shares_tied_crown():
+    assert "results_incomplete" in API_CONTRACT
+    assert '"winners"' in API_CONTRACT
+    assert "shares the crown" in API_CONTRACT
+    assert "canonical final scorecard" in API_CONTRACT
+
