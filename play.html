@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Cast your final predictions in The Tea.">
+    <title>Friday finale predictions — The Tea</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="static/play.js" defer></script>
+  </head>
+  <body>
+    <main class="play-shell">
+      <header class="site-header play-header">
+        <a class="wordmark" href="index.html" aria-label="The Tea home">
+          <span class="wordmark-mark" aria-hidden="true">t</span>
+          <span>the tea</span>
+        </a>
+        <span class="status-pill live-pill"><span aria-hidden="true">●</span> Live</span>
+      </header>
+
+      <section class="game-meta" aria-labelledby="game-title">
+        <p class="eyebrow">Friday watch party</p>
+        <h1 id="game-title">Finale predictions</h1>
+        <div class="joined-summary">
+          <div class="avatar-stack" aria-hidden="true">
+            <span class="avatar avatar-plum">T</span>
+            <span class="avatar avatar-coral">M</span>
+            <span class="avatar avatar-gold">J</span>
+            <span class="avatar avatar-cream">+2</span>
+          </div>
+          <span><strong>5 players</strong> are in the room</span>
+        </div>
+      </section>
+
+      <section id="ballot-screen" aria-labelledby="ballot-heading">
+        <div class="ballot-progress">
+          <div>
+            <p class="step-label" id="ballot-heading">Your ballot</p>
+            <span id="progress-label">1 of 5</span>
+          </div>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-valuemin="1"
+            aria-valuemax="5"
+            aria-valuenow="1"
+            aria-label="Ballot progress"
+          >
+            <span id="progress-fill"></span>
+          </div>
+        </div>
+
+        <article class="vote-card" id="vote-card" aria-live="polite"></article>
+
+        <div class="ballot-controls">
+          <button class="back-button" id="previous-poll" type="button" aria-label="Previous poll">
+            ←
+          </button>
+          <button class="primary-button next-button" id="next-poll" type="button" disabled>
+            <span>Next prediction</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+        <p class="final-vote-note" id="final-vote-note" hidden>
+          Final submission — you won’t be able to change these picks.
+        </p>
+      </section>
+
+      <section id="room-screen" class="room-screen" aria-labelledby="room-title" hidden>
+        <div class="room-hero">
+          <p class="eyebrow">Ballot submitted</p>
+          <h2 id="room-title">The room is getting loud.</h2>
+          <p>Your picks are final. Now watch the drama build.</p>
+        </div>
+
+        <section class="room-card leaderboard-card" aria-labelledby="leaderboard-title">
+          <div class="room-card-heading">
+            <div>
+              <p class="step-label">Live room</p>
+              <h3 id="leaderboard-title">Leaderboard</h3>
+            </div>
+            <span class="live-count" id="live-count">5 joined</span>
+          </div>
+          <div class="leader-list" id="leader-list"></div>
+          <p class="room-helper">Scores wake up when the host spills the tea.</p>
+        </section>
+
+        <section class="room-card activity-card" aria-labelledby="activity-title">
+          <div class="room-card-heading">
+            <div>
+              <p class="step-label">Fresh tea</p>
+              <h3 id="activity-title">Room activity</h3>
+            </div>
+            <span class="activity-dot" aria-hidden="true"></span>
+          </div>
+          <div class="activity-list" id="activity-list" aria-live="polite">
+            <div class="activity-item">
+              <span class="activity-icon">✓</span>
+              <p><strong>Your ballot is in.</strong><br><span>Five bold calls, officially final.</span></p>
+            </div>
+            <div class="activity-item">
+              <span class="activity-icon">👀</span>
+              <p><strong>The room is split.</strong><br><span>Maya + Jordan has everyone arguing.</span></p>
+            </div>
+          </div>
+        </section>
+
+        <details class="room-card predictions-card" open>
+          <summary>
+            <span>
+              <span class="step-label">Locked in</span>
+              <strong>My predictions</strong>
+            </span>
+            <span aria-hidden="true">⌄</span>
+          </summary>
+          <div class="my-picks" id="my-picks"></div>
+        </details>
+      </section>
+    </main>
+
+    <div class="auth-backdrop" id="drama-backdrop" hidden></div>
+    <section
+      class="drama-sheet"
+      id="drama-sheet"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="drama-title"
+      hidden
+    >
+      <button class="close-button" type="button" id="close-drama" aria-label="Close">×</button>
+      <div class="drama-bubbles" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p class="eyebrow">The tea is brewing!</p>
+      <h2 id="drama-title">Your picks have the room talking.</h2>
+      <div class="drama-stats">
+        <div class="drama-stat">
+          <strong>2</strong>
+          <span>times you went against the group</span>
+        </div>
+        <div class="drama-stat">
+          <strong>82%</strong>
+          <span>think someone says no at the altar</span>
+        </div>
+        <div class="drama-stat drama-stat-wide">
+          <strong>Perfectly split</strong>
+          <span>Maya + Jordan is tonight’s messiest prediction.</span>
+        </div>
+      </div>
+      <button class="primary-button" id="enter-room" type="button">
+        <span>Enter the live room</span>
+        <span aria-hidden="true">→</span>
+      </button>
+    </section>
+  </body>
+</html>

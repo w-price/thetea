@@ -6,6 +6,8 @@ LANDING_PAGE = (ROOT / "index.html").read_text()
 FRONTEND_JS = (ROOT / "static" / "app.js").read_text()
 HOST_BUILDER = (ROOT / "host.html").read_text()
 HOST_JS = (ROOT / "static" / "host.js").read_text()
+PLAY_PAGE = (ROOT / "play.html").read_text()
+PLAY_JS = (ROOT / "static" / "play.js").read_text()
 
 
 def test_landing_page_exposes_primary_paths():
@@ -46,3 +48,17 @@ def test_host_chooses_an_eight_character_game_password():
     assert 'minlength="8"' in HOST_BUILDER
     assert 'maxlength="8"' in HOST_BUILDER
     assert '.replace(/[^A-Z0-9]/g, "")' in HOST_JS
+
+
+def test_player_ballot_is_card_based_and_submitted_as_one_final_scorecard():
+    assert 'id="vote-card"' in PLAY_PAGE
+    assert "Review scorecard" in PLAY_JS
+    assert "Submit final votes" in PLAY_JS
+    assert "you won’t be able to change" in PLAY_PAGE
+
+
+def test_post_vote_room_contains_social_feedback_loops():
+    for phrase in ("Leaderboard", "My predictions", "Room activity", "The tea is brewing!"):
+        assert phrase in PLAY_PAGE
+    assert "Sasha joined the party" in PLAY_JS
+    assert "The room just flipped" in PLAY_JS

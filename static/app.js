@@ -78,6 +78,10 @@ document.querySelectorAll("[data-preview-form]").forEach((form) => {
       window.location.href = "host.html";
       return;
     }
+    if (pendingIntent === "join") {
+      window.location.href = "play.html";
+      return;
+    }
     closeAuth();
     showPreviewToast();
   });
