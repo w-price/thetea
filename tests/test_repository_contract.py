@@ -73,3 +73,9 @@ def test_game_password_is_host_chosen_and_eight_characters():
     assert "join_code citext NOT NULL UNIQUE" in SCHEMA
     assert "host-chosen, eight-character game password" in API_CONTRACT
 
+
+def test_named_predictions_unlock_only_after_result_publication():
+    assert "named predictions stay" in API_CONTRACT
+    assert '"prediction_groups"' in API_CONTRACT
+    assert "Names are revealed only for the published poll" in API_CONTRACT
+

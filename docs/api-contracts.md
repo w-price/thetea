@@ -155,6 +155,7 @@ outcome published through **Spill the Tea**.
 | Method | Path | Purpose |
 | --- | --- | --- |
 | `POST` | `/polls/{poll_id}/result` | Publish the actual option and score predictions |
+| `GET` | `/polls/{poll_id}/result` | Published outcome and named prediction groups |
 
 Body: `{"answer_option_id": "uuid"}`.
 
@@ -169,6 +170,30 @@ transaction it:
 Repeating the same request returns the existing result; choosing a different
 answer returns `409 result_already_published`. Result correction is intentionally
 absent from the MVP contract and will require an explicit audited design.
+
+Before publication, the result endpoint returns `404` and named predictions stay
+private. After publication, members receive the second-reveal payload:
+
+```json
+{
+  "poll_id": "uuid",
+  "actual_answer_option_id": "uuid",
+  "published_at": "2026-10-23T21:05:00Z",
+  "current_user_points": 3,
+  "prediction_groups": [
+    {
+      "answer_option_id": "uuid",
+      "is_actual": true,
+      "players": [
+        {"user_id": "uuid", "first_name": "Taylor", "awarded_points": 3}
+      ]
+    }
+  ]
+}
+```
+
+Names are revealed only for the published poll. Unrevealed polls continue to
+expose aggregate statistics without associating players with their answers.
 
 ## Leaderboard polling
 
