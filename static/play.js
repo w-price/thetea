@@ -13,11 +13,11 @@ const outcomes = [
 ];
 
 const players = [
-  { name: "Taylor", initial: "T", voted: true, current: true },
-  { name: "Maya", initial: "M", voted: true },
-  { name: "Jordan", initial: "J", voted: true },
-  { name: "Riley", initial: "R", voted: false },
-  { name: "Chris", initial: "C", voted: true },
+  { name: "Taylor", initial: "T", voted: true, current: true, points: 0 },
+  { name: "Maya", initial: "M", voted: true, points: 0 },
+  { name: "Jordan", initial: "J", voted: true, points: 0 },
+  { name: "Riley", initial: "R", voted: false, points: 0 },
+  { name: "Chris", initial: "C", voted: true, points: 0 },
 ];
 
 const selections = new Map();
@@ -128,7 +128,8 @@ function renderScorecard() {
 
 function renderLeaderboard() {
   const leaderList = document.querySelector("#leader-list");
-  leaderList.innerHTML = players
+  const rankedPlayers = [...players].sort((a, b) => b.points - a.points);
+  leaderList.innerHTML = rankedPlayers
     .map(
       (player, index) => `
         <div class="leader-row ${player.current ? "is-current" : ""}">
@@ -138,7 +139,7 @@ function renderLeaderboard() {
           <span class="ballot-status ${player.voted ? "is-in" : ""}">
             ${player.voted ? "Ballot in" : "Choosing…"}
           </span>
-          <strong>0</strong>
+          <strong class="leader-points">${player.points}</strong>
         </div>
       `,
     )
@@ -186,7 +187,7 @@ function addActivity(icon, title, detail) {
 function startRoomUpdates() {
   roomTimers.push(
     setTimeout(() => {
-      players.push({ name: "Sasha", initial: "S", voted: false });
+      players.push({ name: "Sasha", initial: "S", voted: false, points: 0 });
       renderLeaderboard();
       addActivity("💖", "Sasha joined the party.", "Six people are in the room now.");
     }, 2800),
@@ -198,6 +199,60 @@ function startRoomUpdates() {
       addActivity("🔥", "Another ballot is in.", "The room just flipped on Alex + Sam.");
     }, 5600),
   );
+  roomTimers.push(setTimeout(showPublishedResult, 8400));
+}
+
+function pointsForFirstResult(outcomeId) {
+  if (outcomeId === "altar-no") return 3;
+  if (outcomeId === "breakup") return 1;
+  return 0;
+}
+
+function showPublishedResult() {
+  const userOutcome = selections.get("maya-jordan");
+  const userPoints = pointsForFirstResult(userOutcome);
+  const scoreUpdates = new Map([
+    ["Taylor", userPoints],
+    ["Maya", 0],
+    ["Jordan", 3],
+    ["Riley", 1],
+    ["Chris", 3],
+  ]);
+  players.forEach((player) => {
+    player.points = scoreUpdates.get(player.name) ?? player.points;
+  });
+
+  const groups = {
+    married: ["Maya"],
+    "altar-no": ["Jordan", "Chris"],
+    breakup: ["Riley"],
+  };
+  groups[userOutcome].unshift("Taylor");
+
+  const resultCard = document.querySelector("#player-result-card");
+  resultCard.innerHTML = `
+    <div class="player-result-heading">
+      <span class="tea-spilled-icon" aria-hidden="true">☕</span>
+      <div><p class="step-label">The tea is spilled</p><h3 id="player-result-title">Maya + Jordan</h3></div>
+      <span class="points-burst ${userPoints ? "earned" : ""}">+${userPoints}</span>
+    </div>
+    <div class="actual-result"><span class="vote-flag">NO</span><strong>Someone says no at the altar.</strong></div>
+    <p class="result-reaction">${
+      userPoints === 3
+        ? "Exact call. You knew the tea."
+        : userPoints === 1
+          ? "Right ending, wrong flavor of drama."
+          : "The altar had other plans for your prediction."
+    }</p>
+    <div class="player-prediction-groups">
+      <span><b>YES — Married</b>${groups.married.join(", ")}</span>
+      <span class="is-actual"><b>NO — At the altar</b>${groups["altar-no"].join(", ")}</span>
+      <span><b>NO — Before the altar</b>${groups.breakup.join(", ")}</span>
+    </div>
+  `;
+  resultCard.hidden = false;
+  renderLeaderboard();
+  addActivity("☕", "The host spilled the tea.", "Maya + Jordan scores are now live.");
 }
 
 function submitBallot() {

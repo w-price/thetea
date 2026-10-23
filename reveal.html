@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Reveal results and score The Tea.">
+    <title>Spill the Tea — Host controls</title>
+    <link rel="stylesheet" href="static/styles.css">
+    <script src="static/reveal.js" defer></script>
+  </head>
+  <body>
+    <main class="reveal-shell">
+      <header class="site-header play-header">
+        <a class="wordmark" href="index.html" aria-label="The Tea home">
+          <span class="wordmark-mark" aria-hidden="true">t</span>
+          <span>the tea</span>
+        </a>
+        <span class="status-pill"><span aria-hidden="true">●</span> Host controls</span>
+      </header>
+
+      <section class="game-meta reveal-meta" aria-labelledby="reveal-page-title">
+        <p class="eyebrow">Finale predictions</p>
+        <h1 id="reveal-page-title">Time to spill.</h1>
+        <p class="hero-copy">Pick what really happened. Once it’s out, it’s final.</p>
+      </section>
+
+      <section class="host-score-strip" aria-label="Current leaderboard">
+        <div>
+          <p class="step-label">Live leaderboard</p>
+          <strong id="leaderboard-status">Everyone’s tied at zero</strong>
+        </div>
+        <div class="mini-leaders" id="mini-leaders"></div>
+      </section>
+
+      <div class="reveal-progress">
+        <span id="reveal-progress-label">Reveal 1 of 5</span>
+        <div class="progress-track" aria-hidden="true"><span id="reveal-progress-fill"></span></div>
+      </div>
+
+      <article class="spill-card" id="spill-card" aria-live="polite"></article>
+    </main>
+
+    <div class="auth-backdrop" id="confirm-backdrop" hidden></div>
+    <section
+      class="confirm-sheet"
+      id="confirm-sheet"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title"
+      hidden
+    >
+      <span class="confirm-icon" aria-hidden="true">☕</span>
+      <p class="eyebrow">Last chance to check</p>
+      <h2 id="confirm-title">Spill this as the final result?</h2>
+      <div class="confirm-result" id="confirm-result"></div>
+      <p class="confirm-warning">This publishes names, awards points, and cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="back-button" id="cancel-result" type="button">Not yet</button>
+        <button class="primary-button" id="confirm-result-button" type="button">
+          <span>Yes, spill the tea</span><span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </section>
+  </body>
+</html>

@@ -8,6 +8,8 @@ HOST_BUILDER = (ROOT / "host.html").read_text()
 HOST_JS = (ROOT / "static" / "host.js").read_text()
 PLAY_PAGE = (ROOT / "play.html").read_text()
 PLAY_JS = (ROOT / "static" / "play.js").read_text()
+REVEAL_PAGE = (ROOT / "reveal.html").read_text()
+REVEAL_JS = (ROOT / "static" / "reveal.js").read_text()
 
 
 def test_landing_page_exposes_primary_paths():
@@ -62,3 +64,13 @@ def test_post_vote_room_contains_social_feedback_loops():
         assert phrase in PLAY_PAGE
     assert "Sasha joined the party" in PLAY_JS
     assert "The room just flipped" in PLAY_JS
+    assert 'id="player-result-card"' in PLAY_PAGE
+    assert "showPublishedResult" in PLAY_JS
+    assert "player-prediction-groups" in PLAY_JS
+
+
+def test_host_reveal_is_confirmed_final_and_publishes_named_predictions():
+    assert "Spill this as the final result?" in REVEAL_PAGE
+    assert "cannot be undone" in REVEAL_PAGE
+    assert "Who called what" in REVEAL_JS
+    assert "pointsFor" in REVEAL_JS
